@@ -3,7 +3,10 @@ import Medico from "../models/Medico.js";
 // listar
 export const obtenerMedicos = async (req, res) => {
   try {
-    const medicos = await Medico.find();
+    const medicos = await Medico.find().lean();
+    if (req.headers.accept && req.headers.accept.includes("text/html")) {
+      return res.render("medicos", { medicos, titulo: "Lista de Médicos" });
+    }
     res.json(medicos);
   } catch (error) {
     res.status(500).json({ mensaje: error.message });
